@@ -1,6 +1,14 @@
 # Compiled class file
 *.class
+/target/
+/classes/
+/out/
+.project
+.classpath
 
+.gitignore
+
+/.settings/
 # Log file
 *.log
 

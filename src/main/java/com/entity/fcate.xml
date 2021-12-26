@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.FcateDAO">
+	<resultMap type="fcate" id="fcateMap">
+		<id property="fcateid" column="fcateid" />
+		<result property="fcatename" column="fcatename" />
+		<result property="memo" column="memo" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertFcate" parameterType="fcate">
+		insert into fcate(fcateid , fcatename , memo ) values(#{fcateid} ,
+		#{fcatename} , #{memo} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateFcate" parameterType="fcate">
+		update fcate set fcatename=#{fcatename} , memo=#{memo} where
+		fcateid=#{fcateid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteFcate" parameterType="String">
+		delete from fcate where fcateid = #{fcateid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllFcate" resultMap="fcateMap">
+		select a.* from fcate a where 1=1 order by fcateid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFcateById" parameterType="String" resultMap="fcateMap">
+		select a.* from fcate a where 1=1 and fcateid=#{fcateid} order by
+		fcateid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFcateByCond" parameterType="fcate" resultMap="fcateMap">
+		select a.* from fcate a where 1=1
+		<if test="fcatename != null and '' != fcatename">
+			and a.fcatename = #{fcatename}
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo = #{memo}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFcateByLike" parameterType="fcate" resultMap="fcateMap">
+		select a.* from fcate a where 1=1
+		<if test="fcatename != null and '' != fcatename">
+			and a.fcatename like CONCAT('%', CONCAT(#{fcatename}, '%'))
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

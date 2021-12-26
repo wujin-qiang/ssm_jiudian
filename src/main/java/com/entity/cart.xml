@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.CartDAO">
+	<resultMap type="cart" id="cartMap">
+		<id property="cartid" column="cartid" />
+		<result property="usersid" column="usersid" />
+		<result property="roomsid" column="roomsid" />
+		<result property="price" column="price" />
+		<result property="addtime" column="addtime" />
+		<result property="username" column="username" />
+		<result property="roomsno" column="roomsno" />
+		<result property="roomsno" column="roomsno" />
+		<result property="begindate" column="begindate" />
+		<result property="enddate" column="enddate" />
+		<result property="carroomflag" column="carroomflag" />
+		<result property="image" column="image" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertCart" parameterType="cart">
+		insert into cart(cartid ,
+		usersid , roomsid , price , addtime,begindate,enddate,carroomflag )
+		values(#{cartid} , #{usersid} ,
+		#{roomsid} , #{price} , #{addtime} , #{begindate} , #{enddate}, #{carroomflag} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateCart" parameterType="cart">
+		update cart set
+		usersid=#{usersid} , roomsid=#{roomsid} , price=#{price} ,
+		addtime=#{addtime} where cartid=#{cartid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteCart" parameterType="String">
+		delete from cart where
+		cartid = #{cartid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllCart" resultMap="cartMap">
+		select a.* , b.username ,
+		c.roomsno , c.image from cart a , users b , rooms c where
+		a.usersid = b.usersid and a.roomsid = c.roomsid and carroomflag!='1' order by
+		cartid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getCartById" parameterType="String" resultMap="cartMap">
+		select a.* , b.username , c.roomsno , c.image from cart a , users b ,
+		rooms c
+		where a.usersid = b.usersid and a.roomsid = c.roomsid and
+		cartid=#{cartid} order by cartid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getCartByCond" parameterType="cart" resultMap="cartMap">
+		select a.* , b.username , c.roomsno , c.image from cart a , users b ,
+		rooms c
+		where a.usersid = b.usersid and a.roomsid = c.roomsid
+		and carroomflag !='1'
+		<if test="usersid != null and '' != usersid">
+			and a.usersid = #{usersid}
+		</if>
+		<if test="roomsid != null and '' != roomsid">
+			and a.roomsid = #{roomsid}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+	</select>
+
+	<select id="getCartByCondIsUse" parameterType="cart" resultMap="cartMap">
+		select a.* , b.username , c.roomsno , c.image from cart a , users b ,
+		rooms c
+		where a.usersid = b.usersid and a.roomsid = c.roomsid
+		<if test="usersid != null and '' != usersid">
+			and a.usersid = #{usersid}
+		</if>
+		<if test="roomsid != null and '' != roomsid">
+			and a.roomsid = #{roomsid}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+	</select>
+
+
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getCartByLike" parameterType="cart" resultMap="cartMap">
+		select a.* , b.username , c.roomsno , c.image from cart a , users b ,
+		rooms c
+		where a.usersid = b.usersid and a.roomsid = c.roomsid
+		and carroomflag !='1'
+		<if test="usersid != null and '' != usersid">
+			and a.usersid like CONCAT('%', CONCAT(#{usersid}, '%'))
+		</if>
+		<if test="roomsid != null and '' != roomsid">
+			and a.roomsid like CONCAT('%', CONCAT(#{roomsid}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+	</select>
+
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateCartType" parameterType="cart">
+		update cart set
+		carroomflag=#{carroomflag} where cartid=#{cartid}
+	</update>
+</mapper>
+
+

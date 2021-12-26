@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.FordersDAO">
+	<resultMap type="forders" id="fordersMap">
+		<id property="fordersid" column="fordersid" />
+		<result property="ordercode" column="ordercode" />
+		<result property="usersid" column="usersid" />
+		<result property="total" column="total" />
+		<result property="addtime" column="addtime" />
+		<result property="status" column="status" />
+		<result property="username" column="username" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertForders" parameterType="forders">
+		insert into forders(fordersid , ordercode , usersid , total , addtime ,
+		status ) values(#{fordersid} , #{ordercode} , #{usersid} , #{total} ,
+		#{addtime} , #{status} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateForders" parameterType="forders">
+		update forders set ordercode=#{ordercode} , usersid=#{usersid} ,
+		total=#{total} , addtime=#{addtime} , status=#{status} where
+		fordersid=#{fordersid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteForders" parameterType="String">
+		delete from forders where fordersid = #{fordersid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllForders" resultMap="fordersMap">
+		select a.* , b.username from forders a , users b where 1=1 and a.usersid =
+		b.usersid order by fordersid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFordersById" parameterType="String" resultMap="fordersMap">
+		select a.* , b.username from forders a , users b where 1=1 and
+		a.usersid = b.usersid and fordersid=#{fordersid} order by fordersid
+		desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFordersByCond" parameterType="forders" resultMap="fordersMap">
+		select a.* , b.username from forders a , users b where 1=1 and
+		a.usersid = b.usersid
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode = #{ordercode}
+		</if>
+		<if test="usersid != null and '' != usersid">
+			and a.usersid = #{usersid}
+		</if>
+		<if test="total != null and '' != total">
+			and a.total = #{total}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+		<if test="status != null and '' != status">
+			and a.status = #{status}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFordersByLike" parameterType="forders" resultMap="fordersMap">
+		select a.* , b.username from forders a , users b where 1=1 and
+		a.usersid = b.usersid
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode like CONCAT('%', CONCAT(#{ordercode}, '%'))
+		</if>
+		<if test="usersid != null and '' != usersid">
+			and a.usersid like CONCAT('%', CONCAT(#{usersid}, '%'))
+		</if>
+		<if test="total != null and '' != total">
+			and a.total like CONCAT('%', CONCAT(#{total}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+		<if test="status != null and '' != status">
+			and a.status like CONCAT('%', CONCAT(#{status}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

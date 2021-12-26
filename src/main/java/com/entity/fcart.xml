@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.FcartDAO">
+	<resultMap type="fcart" id="fcartMap">
+		<id property="fcartid" column="fcartid" />
+		<result property="usersid" column="usersid" />
+		<result property="foodsid" column="foodsid" />
+		<result property="num" column="num" />
+		<result property="price" column="price" />
+		<result property="addtime" column="addtime" />
+		<result property="username" column="username" />
+		<result property="foodsname" column="foodsname" />
+		<result property="image" column="image" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertFcart" parameterType="fcart">
+		insert into fcart(fcartid
+		, usersid , foodsid , num , price , addtime )
+		values(#{fcartid} ,
+		#{usersid} , #{foodsid} , #{num} , #{price} ,
+		#{addtime} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateFcart" parameterType="fcart">
+		update fcart set
+		usersid=#{usersid} , foodsid=#{foodsid} , num=#{num} ,
+		price=#{price} ,
+		addtime=#{addtime} where fcartid=#{fcartid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteFcart" parameterType="String">
+		delete from fcart where
+		fcartid = #{fcartid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllFcart" resultMap="fcartMap">
+		select a.* , b.username ,
+		c.foodsname , c.image from fcart a , users b , foods c where
+		a.usersid
+		=
+		b.usersid and a.foodsid = c.foodsid order by
+		fcartid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFcartById" parameterType="String" resultMap="fcartMap">
+		select a.* , b.username , c.foodsname , c.image from fcart a , users b
+		, foods c
+		where a.usersid = b.usersid and a.foodsid = c.foodsid and
+		fcartid=#{fcartid} order by fcartid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFcartByCond" parameterType="fcart" resultMap="fcartMap">
+		select a.* , b.username , c.foodsname , c.image from fcart a , users b
+		, foods c
+		where a.usersid = b.usersid and a.foodsid = c.foodsid
+		<if test="usersid != null and '' != usersid">
+			and a.usersid = #{usersid}
+		</if>
+		<if test="foodsid != null and '' != foodsid">
+			and a.foodsid = #{foodsid}
+		</if>
+		<if test="num != null and '' != num">
+			and a.num = #{num}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFcartByLike" parameterType="fcart" resultMap="fcartMap">
+		select a.* , b.username , c.foodsname , c.image from fcart a , users b
+		, foods c
+		where a.usersid = b.usersid and a.foodsid = c.foodsid
+		<if test="usersid != null and '' != usersid">
+			and a.usersid like CONCAT('%', CONCAT(#{usersid}, '%'))
+		</if>
+		<if test="foodsid != null and '' != foodsid">
+			and a.foodsid like CONCAT('%', CONCAT(#{foodsid}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

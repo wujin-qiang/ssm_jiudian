@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.BooksDAO">
+	<resultMap type="books" id="booksMap">
+		<id property="booksid" column="booksid" />
+		<result property="ordercode" column="ordercode" />
+		<result property="cate" column="cate" />
+		<result property="money" column="money" />
+		<result property="addtime" column="addtime" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertBooks" parameterType="books">
+		insert into books(booksid , ordercode , cate , money , addtime )
+		values(#{booksid} , #{ordercode} , #{cate} , #{money} , #{addtime} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateBooks" parameterType="books">
+		update books set ordercode=#{ordercode} , cate=#{cate} , money=#{money} ,
+		addtime=#{addtime} where booksid=#{booksid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteBooks" parameterType="String">
+		delete from books where booksid = #{booksid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllBooks" resultMap="booksMap">
+		select a.* from books a where 1=1 order by booksid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getBooksById" parameterType="String" resultMap="booksMap">
+		select a.* from books a where 1=1 and booksid=#{booksid} order by
+		booksid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getBooksByCond" parameterType="books" resultMap="booksMap">
+		select a.* from books a where 1=1
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode = #{ordercode}
+		</if>
+		<if test="cate != null and '' != cate">
+			and a.cate = #{cate}
+		</if>
+		<if test="money != null and '' != money">
+			and a.money = #{money}
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getBooksByLike" parameterType="books" resultMap="booksMap">
+		select a.* from books a where 1=1
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode like CONCAT('%', CONCAT(#{ordercode}, '%'))
+		</if>
+		<if test="cate != null and '' != cate">
+			and a.cate like CONCAT('%', CONCAT(#{cate}, '%'))
+		</if>
+		<if test="money != null and '' != money">
+			and a.money like CONCAT('%', CONCAT(#{money}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

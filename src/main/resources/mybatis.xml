@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="admin" type="com.entity.Admin" />
+		<typeAlias alias="users" type="com.entity.Users" />
+		<typeAlias alias="article" type="com.entity.Article" />
+		<typeAlias alias="cate" type="com.entity.Cate" />
+		<typeAlias alias="rooms" type="com.entity.Rooms" />
+		<typeAlias alias="cart" type="com.entity.Cart" />
+		<typeAlias alias="orders" type="com.entity.Orders" />
+		<typeAlias alias="fcate" type="com.entity.Fcate" />
+		<typeAlias alias="foods" type="com.entity.Foods" />
+		<typeAlias alias="fcart" type="com.entity.Fcart" />
+		<typeAlias alias="forders" type="com.entity.Forders" />
+		<typeAlias alias="fitems" type="com.entity.Fitems" />
+		<typeAlias alias="books" type="com.entity.Books" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="com/entity/admin.xml" />
+		<mapper resource="com/entity/users.xml" />
+		<mapper resource="com/entity/article.xml" />
+		<mapper resource="com/entity/cate.xml" />
+		<mapper resource="com/entity/rooms.xml" />
+		<mapper resource="com/entity/cart.xml" />
+		<mapper resource="com/entity/orders.xml" />
+		<mapper resource="com/entity/fcate.xml" />
+		<mapper resource="com/entity/foods.xml" />
+		<mapper resource="com/entity/fcart.xml" />
+		<mapper resource="com/entity/forders.xml" />
+		<mapper resource="com/entity/fitems.xml" />
+		<mapper resource="com/entity/books.xml" />
+	</mappers>
+</configuration>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.RoomsDAO">
+	<resultMap type="rooms" id="roomsMap">
+		<id property="roomsid" column="roomsid" />
+		<result property="roomsno" column="roomsno" />
+		<result property="cateid" column="cateid" />
+		<result property="price" column="price" />
+		<result property="image" column="image" />
+		<result property="shebei" column="shebei" />
+		<result property="chaoxiang" column="chaoxiang" />
+		<result property="mianji" column="mianji" />
+		<result property="status" column="status" />
+		<result property="contents" column="contents" />
+		<result property="catename" column="catename" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertRooms" parameterType="rooms">
+		insert into rooms(roomsid
+		, roomsno , cateid , price , image , shebei ,
+		chaoxiang , mianji ,
+		status , contents ) values(#{roomsid} ,
+		#{roomsno} , #{cateid} ,
+		#{price} , #{image} , #{shebei} ,
+		#{chaoxiang} , #{mianji} , #{status}
+		, #{contents} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateRooms" parameterType="rooms">
+		update rooms set
+		roomsno=#{roomsno} , cateid=#{cateid} , price=#{price} ,
+		image=#{image} , shebei=#{shebei} , chaoxiang=#{chaoxiang} ,
+		mianji=#{mianji} , status=#{status} , contents=#{contents} where
+		roomsid=#{roomsid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteRooms" parameterType="String">
+		delete from rooms where
+		roomsid = #{roomsid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllRooms" resultMap="roomsMap">
+		select a.* , b.catename from
+		rooms a , cate b where 1=1 and a.cateid =
+		b.cateid order by roomsid
+		desc
+	</select>
+	
+	<select id="getFrontRooms" resultMap="roomsMap">
+		select a.* , b.catename
+		from rooms a , cate b where 1=1 and a.cateid =
+		b.cateid order by
+		roomsid desc limit 5
+	</select>
+
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getRoomsById" parameterType="String" resultMap="roomsMap">
+		select a.* , b.catename from rooms a , cate b where 1=1 and a.cateid =
+		b.cateid and roomsid=#{roomsid} order by roomsid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getRoomsByCond" parameterType="rooms" resultMap="roomsMap">
+		select a.* , b.catename from rooms a , cate b where 1=1 and a.cateid =
+		b.cateid
+		<if test="roomsno != null and '' != roomsno">
+			and a.roomsno = #{roomsno}
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.cateid = #{cateid}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="image != null and '' != image">
+			and a.image = #{image}
+		</if>
+		<if test="shebei != null and '' != shebei">
+			and a.shebei = #{shebei}
+		</if>
+		<if test="chaoxiang != null and '' != chaoxiang">
+			and a.chaoxiang = #{chaoxiang}
+		</if>
+		<if test="mianji != null and '' != mianji">
+			and a.mianji = #{mianji}
+		</if>
+		<if test="status != null and '' != status">
+			and a.status = #{status}
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents = #{contents}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getRoomsByLike" parameterType="rooms" resultMap="roomsMap">
+		select a.* , b.catename from rooms a , cate b where 1=1 and a.cateid =
+		b.cateid
+		<if test="roomsno != null and '' != roomsno">
+			and a.roomsno like CONCAT('%', CONCAT(#{roomsno}, '%'))
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.cateid like CONCAT('%', CONCAT(#{cateid}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="image != null and '' != image">
+			and a.image like CONCAT('%', CONCAT(#{image}, '%'))
+		</if>
+		<if test="shebei != null and '' != shebei">
+			and a.shebei like CONCAT('%', CONCAT(#{shebei}, '%'))
+		</if>
+		<if test="chaoxiang != null and '' != chaoxiang">
+			and a.chaoxiang like CONCAT('%', CONCAT(#{chaoxiang},
+			'%'))
+		</if>
+		<if test="mianji != null and '' != mianji">
+			and a.mianji like CONCAT('%', CONCAT(#{mianji}, '%'))
+		</if>
+		<if test="status != null and '' != status">
+			and a.status like CONCAT('%', CONCAT(#{status}, '%'))
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents like CONCAT('%', CONCAT(#{contents}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

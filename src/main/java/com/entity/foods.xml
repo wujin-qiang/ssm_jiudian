@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.FoodsDAO">
+	<resultMap type="foods" id="foodsMap">
+		<id property="foodsid" column="foodsid" />
+		<result property="foodsname" column="foodsname" />
+		<result property="fcateid" column="fcateid" />
+		<result property="image" column="image" />
+		<result property="price" column="price" />
+		<result property="sellnum" column="sellnum" />
+		<result property="contents" column="contents" />
+		<result property="fcatename" column="fcatename" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertFoods" parameterType="foods">
+		insert into foods(foodsid
+		, foodsname , fcateid , image , price , sellnum ,
+		contents )
+		values(#{foodsid} , #{foodsname} , #{fcateid} , #{image} ,
+		#{price} ,
+		#{sellnum} , #{contents} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateFoods" parameterType="foods">
+		update foods set
+		foodsname=#{foodsname} , fcateid=#{fcateid} ,
+		image=#{image} ,
+		price=#{price} , sellnum=#{sellnum} ,
+		contents=#{contents} where
+		foodsid=#{foodsid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteFoods" parameterType="String">
+		delete from foods where
+		foodsid = #{foodsid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllFoods" resultMap="foodsMap">
+		select a.* , b.fcatename from
+		foods a , fcate b where a.fcateid =
+		b.fcateid order by foodsid
+		desc
+	</select>
+	<select id="getFrontFoods" resultMap="foodsMap">
+		select a.* , b.fcatename
+		from foods a , fcate b where a.fcateid =
+		b.fcateid order by
+		foodsid desc
+		limit 10
+	</select>
+
+	<select id="getHotFoods" resultMap="foodsMap">
+		select a.* , b.fcatename
+		from
+		foods a , fcate b where a.fcateid =
+		b.fcateid order by
+		sellnum desc
+		limit 5
+	</select>
+
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFoodsById" parameterType="String" resultMap="foodsMap">
+		select a.* , b.fcatename from foods a , fcate b where
+		a.fcateid = b.fcateid and foodsid=#{foodsid} order by foodsid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFoodsByCond" parameterType="foods" resultMap="foodsMap">
+		select a.* , b.fcatename from foods a , fcate b where
+		a.fcateid = b.fcateid
+		<if test="foodsname != null and '' != foodsname">
+			and a.foodsname = #{foodsname}
+		</if>
+		<if test="fcateid != null and '' != fcateid">
+			and a.fcateid = #{fcateid}
+		</if>
+		<if test="image != null and '' != image">
+			and a.image = #{image}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+		<if test="sellnum != null and '' != sellnum">
+			and a.sellnum = #{sellnum}
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents = #{contents}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFoodsByLike" parameterType="foods" resultMap="foodsMap">
+		select a.* , b.fcatename from foods a , fcate b where
+		a.fcateid = b.fcateid
+		<if test="foodsname != null and '' != foodsname">
+			and a.foodsname like CONCAT('%', CONCAT(#{foodsname},
+			'%'))
+		</if>
+		<if test="fcateid != null and '' != fcateid">
+			and a.fcateid like CONCAT('%', CONCAT(#{fcateid}, '%'))
+		</if>
+		<if test="image != null and '' != image">
+			and a.image like CONCAT('%', CONCAT(#{image}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="sellnum != null and '' != sellnum">
+			and a.sellnum like CONCAT('%', CONCAT(#{sellnum}, '%'))
+		</if>
+		<if test="contents != null and '' != contents">
+			and a.contents like CONCAT('%', CONCAT(#{contents}, '%'))
+		</if>
+	</select>
+</mapper>
+
+

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.FitemsDAO">
+	<resultMap type="fitems" id="fitemsMap">
+		<id property="fitemsid" column="fitemsid" />
+		<result property="ordercode" column="ordercode" />
+		<result property="foodsid" column="foodsid" />
+		<result property="num" column="num" />
+		<result property="price" column="price" />
+		<result property="foodsname" column="foodsname" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertFitems" parameterType="fitems">
+		insert into fitems(fitemsid , ordercode , foodsid , num , price )
+		values(#{fitemsid} , #{ordercode} , #{foodsid} , #{num} , #{price} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+	<update id="updateFitems" parameterType="fitems">
+		update fitems set ordercode=#{ordercode} , foodsid=#{foodsid} , num=#{num} ,
+		price=#{price} where fitemsid=#{fitemsid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteFitems" parameterType="String">
+		delete from fitems where fitemsid = #{fitemsid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置 -->
+	<select id="getAllFitems" resultMap="fitemsMap">
+		select a.* , b.foodsname from fitems a , foods b where 1=1 and a.foodsid =
+		b.foodsid order by fitemsid desc
+	</select>
+	<!-- 按主键查询 DAO通过id调用此配置 -->
+	<select id="getFitemsById" parameterType="String" resultMap="fitemsMap">
+		select a.* , b.foodsname from fitems a , foods b where 1=1 and
+		a.foodsid = b.foodsid and fitemsid=#{fitemsid} order by fitemsid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置 -->
+	<select id="getFitemsByCond" parameterType="fitems" resultMap="fitemsMap">
+		select a.* , b.foodsname from fitems a , foods b where 1=1 and
+		a.foodsid = b.foodsid
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode = #{ordercode}
+		</if>
+		<if test="foodsid != null and '' != foodsid">
+			and a.foodsid = #{foodsid}
+		</if>
+		<if test="num != null and '' != num">
+			and a.num = #{num}
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置 -->
+	<select id="getFitemsByLike" parameterType="fitems" resultMap="fitemsMap">
+		select a.* , b.foodsname from fitems a , foods b where 1=1 and
+		a.foodsid = b.foodsid
+		<if test="ordercode != null and '' != ordercode">
+			and a.ordercode like CONCAT('%', CONCAT(#{ordercode}, '%'))
+		</if>
+		<if test="foodsid != null and '' != foodsid">
+			and a.foodsid like CONCAT('%', CONCAT(#{foodsid}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
